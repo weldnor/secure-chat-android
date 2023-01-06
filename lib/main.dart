@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:secure_chat/service/message_service.dart';
-import 'package:secure_chat/view/main_page.dart';
+import 'package:secure_chat/view/intro_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MainPage(),
+      home: const IntroPage(),
       debugShowCheckedModeBanner: false,
     );
   }

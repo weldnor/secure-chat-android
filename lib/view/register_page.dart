@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'main_page.dart';
+import 'package:secure_chat/view/main.page.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -21,9 +20,13 @@ class RegisterPage extends StatelessWidget {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          children: const [Text('Choice your nick')],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             MaterialButton(
-                child: const Text('Return to main page'),
+                child: const Text('Next'),
                 onPressed: () => goToMainPage(context))
           ],
         )
@@ -33,7 +36,7 @@ class RegisterPage extends StatelessWidget {
 
   Future<dynamic> goToMainPage(BuildContext context) {
     return Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const MainPage(),
+      builder: (context) =>  const MainPage(),
     ));
   }
 }

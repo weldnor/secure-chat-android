@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:secure_chat/service/message_service.dart';
 import 'package:secure_chat/view/register_page.dart';
 
-class MainPage extends StatelessWidget {
-  const MainPage({super.key});
+class IntroPage extends StatelessWidget {
+  const IntroPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +26,6 @@ class MainPage extends StatelessWidget {
                 onPressed: () => {goToRegisterPage(context)})
           ],
         ),
-        Column(
-          children: getMessagesAsWidgets(),
-        )
       ]),
     ));
   }
@@ -38,10 +34,5 @@ class MainPage extends StatelessWidget {
     return Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const RegisterPage(),
     ));
-  }
-
-  List<Widget> getMessagesAsWidgets() {
-    var messageService = MessageService();
-    return messageService.getMessages().map((e) => Text(e.toString())).toList();
   }
 }
