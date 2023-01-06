@@ -9,7 +9,8 @@ class IntroPage extends StatelessWidget {
     return Scaffold(
         body: SafeArea(
       child: Column(children: [
-        Row(
+        Expanded(
+            child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Text(
@@ -17,22 +18,23 @@ class IntroPage extends StatelessWidget {
               style: TextStyle(fontSize: 20),
             )
           ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            MaterialButton(
-                child: const Text('Register'),
-                onPressed: () => {goToRegisterPage(context)})
-          ],
-        ),
+        )),
+        Padding(
+            padding: const EdgeInsets.all(15),
+            child: ElevatedButton(
+              onPressed: () => goToRegisterPage(context),
+              style: ElevatedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                  minimumSize: const Size.fromHeight(55)),
+              child: const Text('Register'),
+            )),
       ]),
     ));
   }
 
   Future<dynamic> goToRegisterPage(BuildContext context) {
     return Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const RegisterPage(),
+      builder: (context) =>  const RegisterPage(),
     ));
   }
 }
