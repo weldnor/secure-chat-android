@@ -13,7 +13,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int index = 1;
+  int index = 0;
 
   final screens  = const [
     ChatsPage(),
