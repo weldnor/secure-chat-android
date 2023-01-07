@@ -42,7 +42,6 @@ class _ContactsPageState extends State<ContactsPage> {
               itemCount: contacts.length,
               shrinkWrap: true,
               padding: const EdgeInsets.only(top: 10, bottom: 10),
-              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return Row(
                   children: [
