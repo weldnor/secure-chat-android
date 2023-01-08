@@ -1,16 +1,12 @@
 # secure_chat
 
-A new Flutter project.
+## Generate classes for Hive
 
-## Getting Started
+```bash
+flutter packages pub run build_runner build --delete-conflicting-outputs
+```
 
-This project is a starting point for a Flutter application.
+## Interesting links
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+https://www.freecodecamp.org/news/build-a-chat-app-ui-with-flutter/
+https://www.youtube.com/watch?v=eENDlIgadr4

@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:secure_chat/view/intro_page.dart';
 
-void main() {
+import 'domain/settings.dart';
+
+void main() async {
+  await init();
   runApp(const MyApp());
+}
+
+init() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(SettingsAdapter());
 }
 
 class MyApp extends StatelessWidget {
