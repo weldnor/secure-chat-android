@@ -17,6 +17,22 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final _settingsService = GetIt.I.get<SettingsService>();
 
+  var _name = '';
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  init() async {
+    var settings = await _settingsService.getSettings();
+    if (settings == null) {
+      throw Exception('settings is null');
+    }
+    _name = settings.name;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,13 +54,16 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         Row(
           children: [
-            const Expanded(
-              child: TextField(),
+            Expanded(
+              child: TextField(onChanged: (value) {
+                //todo move logic to method
+                _name = value;
+              }),
             ),
             Column(
               children: [
                 MaterialButton(
-                  onPressed: () {},
+                  onPressed: onSaveNickButtonClicked,
                   child: const Text('save'),
                 )
               ],
@@ -71,20 +90,31 @@ class _SettingsPageState extends State<SettingsPage> {
 
   onShowPublicKeyButtonClicked() {
     // todo bug? where is context?
-    return Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const ShareKeyPage(),
     ));
   }
 
   onDeleteAccountButtonClicked() async {
     await _settingsService.deleteSettings();
-    return goToIntroPage();
-  }
 
-  Future<dynamic> goToIntroPage() {
     // todo bug? where is context?
-    return Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const IntroPage(),
     ));
+  }
+
+  onSaveNickButtonClicked() async {
+    if (_name.isEmpty) {
+      return;
+    }
+
+    var settings = await _settingsService.getSettings();
+    if (settings == null) {
+      throw Exception('settings is null');
+    }
+
+    settings.name = _name;
+    await settings.save();
   }
 }
