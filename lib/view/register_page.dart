@@ -63,6 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<dynamic> onRegisterButtonClicked(BuildContext context) {
+    // todo move to service
     RSAKeypair rsaKeypair = RSAKeypair.fromRandom();
     var publicKey = rsaKeypair.publicKey.toString();
     var privateKey = rsaKeypair.privateKey.toString();
