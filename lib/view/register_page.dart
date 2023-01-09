@@ -1,5 +1,10 @@
+import 'package:crypton/crypton.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:secure_chat/domain/settings.dart';
 import 'package:secure_chat/view/main.page.dart';
+
+import '../service/settings_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -10,6 +15,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   String _nick = '';
+  final _settingsService = GetIt.I.get<SettingsService>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +43,8 @@ class _RegisterPageState extends State<RegisterPage> {
       Padding(
           padding: const EdgeInsets.all(15),
           child: ElevatedButton(
-              onPressed: () => _validate() ? goToMainPage(context) : null,
+              onPressed: () =>
+                  _validate() ? onRegisterButtonClicked(context) : null,
               style: ElevatedButton.styleFrom(
                   shape: const StadiumBorder(),
                   minimumSize: const Size.fromHeight(55)),
@@ -55,7 +62,19 @@ class _RegisterPageState extends State<RegisterPage> {
     return _nick.isNotEmpty;
   }
 
-  Future<dynamic> goToMainPage(BuildContext context) {
+  Future<dynamic> onRegisterButtonClicked(BuildContext context) {
+    RSAKeypair rsaKeypair = RSAKeypair.fromRandom();
+    var publicKey = rsaKeypair.publicKey.toString();
+    var privateKey = rsaKeypair.privateKey.toString();
+    // todo fix it
+    var avatarUrl =
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU';
+
+    // save user info
+    var settings = Settings(_nick, publicKey, privateKey, avatarUrl);
+    _settingsService.saveSettings(settings);
+
+    // go to main page
     return Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const MainPage(),
     ));
