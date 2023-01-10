@@ -11,6 +11,8 @@ abstract class AbstractSettingsRepository {
 }
 
 class SettingsRepository extends AbstractSettingsRepository {
+  //todo fix it
+
   @override
   Future<Settings?> getSettings() async {
     var box = await Hive.openBox<Settings>('settings');

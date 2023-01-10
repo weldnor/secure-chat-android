@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:secure_chat/service/contact_service.dart';
 
+import '../domain/contact.dart';
 import 'add_contact_page.dart';
 
 class ContactsPage extends StatefulWidget {
@@ -13,15 +15,7 @@ class ContactsPage extends StatefulWidget {
 }
 
 class _ContactsPageState extends State<ContactsPage> {
-  var contactService = ContactService();
-  List<Contact> contacts = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    contacts = contactService.getContacts();
-  }
+  var contactService = GetIt.I.get<ContactService>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,35 +32,44 @@ class _ContactsPageState extends State<ContactsPage> {
             )
           ]),
           Expanded(
-            child: ListView.builder(
-              itemCount: contacts.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 10, bottom: 10),
-              itemBuilder: (context, index) {
-                return Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                      child: Row(children: [
-                        Column(
-                          children: [
-                            CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(contacts[index].avatarUrl)),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(contacts[index].name,
-                              style: const TextStyle(fontSize: 16)),
-                        )
-                      ]),
-                    )
-                  ],
-                );
-              },
-            ),
-          ),
+              child: FutureBuilder<List<Contact>>(
+                  future: contactService.getContacts(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var contacts = snapshot.data!;
+
+                      return ListView.builder(
+                        itemCount: contacts.length,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        itemBuilder: (context, index) {
+                          return Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                                child: Row(children: [
+                                  Column(
+                                    children: [
+                                      CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                              contacts[index].avatarUrl)),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(contacts[index].name,
+                                        style: const TextStyle(fontSize: 16)),
+                                  )
+                                ]),
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }
+                    return const Text('loading...');
+                  })),
         ]),
       ),
       floatingActionButton: FloatingActionButton(

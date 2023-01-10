@@ -4,6 +4,8 @@ import 'package:secure_chat/view/contacts_page.dart';
 import 'package:secure_chat/view/settings_page.dart';
 
 class MainPage extends StatefulWidget {
+  //todo: pass active tab
+
   const MainPage({super.key});
 
   @override

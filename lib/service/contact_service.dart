@@ -1,47 +1,23 @@
-class Contact {
-  String avatarUrl;
-  String name;
+import 'package:secure_chat/repository/contact_repository.dart';
 
-  Contact(this.avatarUrl, this.name);
-
-  @override
-  String toString() {
-    return 'Contact{avatarUrl: $avatarUrl, name: $name}';
-  }
-}
+import '../domain/contact.dart';
 
 abstract class AbstractContactService {
-  List<Contact> getContacts();
+  Future<List<Contact>> getContacts();
+
+  Future<void> addContact(Contact contact);
 }
 
 class ContactService implements AbstractContactService {
+  ContactRepository repository = ContactRepository();
+
   @override
-  List<Contact> getContacts() {
-    return [
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU', 'Anthony'),
-      Contact('https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png', 'Bryan'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSurwho7zsjHiiB2dUTQfuBJ075piTV0aYUQoB3jklw5_4nIiT8WceNEET6hg5YNElL8ks&usqp=CAU', 'Brianna'),
-      Contact('https://img.freepik.com/vector-premium/retrato-avatar-hombre-joven-caucasico-marco-redondo-ilustracion-plana-dibujos-animados-vector_551425-19.jpg?w=2000', 'Diana'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU', 'Anthony'),
-      Contact('https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png', 'Bryan'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSurwho7zsjHiiB2dUTQfuBJ075piTV0aYUQoB3jklw5_4nIiT8WceNEET6hg5YNElL8ks&usqp=CAU', 'Brianna'),
-      Contact('https://img.freepik.com/vector-premium/retrato-avatar-hombre-joven-caucasico-marco-redondo-ilustracion-plana-dibujos-animados-vector_551425-19.jpg?w=2000', 'Diana'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU', 'Anthony'),
-      Contact('https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png', 'Bryan'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSurwho7zsjHiiB2dUTQfuBJ075piTV0aYUQoB3jklw5_4nIiT8WceNEET6hg5YNElL8ks&usqp=CAU', 'Brianna'),
-      Contact('https://img.freepik.com/vector-premium/retrato-avatar-hombre-joven-caucasico-marco-redondo-ilustracion-plana-dibujos-animados-vector_551425-19.jpg?w=2000', 'Diana'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU', 'Anthony'),
-      Contact('https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png', 'Bryan'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSurwho7zsjHiiB2dUTQfuBJ075piTV0aYUQoB3jklw5_4nIiT8WceNEET6hg5YNElL8ks&usqp=CAU', 'Brianna'),
-      Contact('https://img.freepik.com/vector-premium/retrato-avatar-hombre-joven-caucasico-marco-redondo-ilustracion-plana-dibujos-animados-vector_551425-19.jpg?w=2000', 'Diana'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU', 'Anthony'),
-      Contact('https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png', 'Bryan'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSurwho7zsjHiiB2dUTQfuBJ075piTV0aYUQoB3jklw5_4nIiT8WceNEET6hg5YNElL8ks&usqp=CAU', 'Brianna'),
-      Contact('https://img.freepik.com/vector-premium/retrato-avatar-hombre-joven-caucasico-marco-redondo-ilustracion-plana-dibujos-animados-vector_551425-19.jpg?w=2000', 'Diana'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU', 'Anthony'),
-      Contact('https://www.kindpng.com/picc/m/78-786207_user-avatar-png-user-avatar-icon-png-transparent.png', 'Bryan'),
-      Contact('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSurwho7zsjHiiB2dUTQfuBJ075piTV0aYUQoB3jklw5_4nIiT8WceNEET6hg5YNElL8ks&usqp=CAU', 'Brianna'),
-      Contact('https://img.freepik.com/vector-premium/retrato-avatar-hombre-joven-caucasico-marco-redondo-ilustracion-plana-dibujos-animados-vector_551425-19.jpg?w=2000', 'Diana'),
-    ];
+  Future<List<Contact>> getContacts() {
+    return repository.getContacts();
+  }
+
+  @override
+  Future<void> addContact(Contact contact) {
+    return repository.addContact(contact);
   }
 }

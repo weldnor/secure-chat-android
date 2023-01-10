@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:secure_chat/domain/contact.dart';
 import 'package:secure_chat/service/chat_service.dart';
 import 'package:secure_chat/service/contact_service.dart';
 import 'package:secure_chat/service/message_service.dart';
@@ -22,6 +23,7 @@ init() async {
 Future<void> initDatabase() async {
   await Hive.initFlutter();
   Hive.registerAdapter(SettingsAdapter());
+  Hive.registerAdapter(ContactAdapter());
 }
 
 void initDependencies() {
