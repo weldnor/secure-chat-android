@@ -16,4 +16,8 @@ class SettingsService {
   Future<void> deleteSettings() {
     return repository.deleteSettings();
   }
+
+  Future<bool> isLoggedIn() async {
+    return await getSettings() != null;
+  }
 }

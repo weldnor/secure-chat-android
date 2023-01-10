@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:secure_chat/domain/contact.dart';
 import 'package:secure_chat/service/chat_service.dart';
@@ -6,13 +7,13 @@ import 'package:secure_chat/service/contact_service.dart';
 import 'package:secure_chat/service/message_service.dart';
 import 'package:secure_chat/service/settings_service.dart';
 import 'package:secure_chat/view/intro_page.dart';
-import 'package:get_it/get_it.dart';
+import 'package:secure_chat/view/main.page.dart';
 
 import 'domain/settings.dart';
 
 void main() async {
   await init();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 init() async {
@@ -34,7 +35,9 @@ void initDependencies() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SettingsService _settingsService = GetIt.I.get<SettingsService>();
+
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -44,7 +47,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const IntroPage(),
+      home: FutureBuilder<bool>(
+        future: _settingsService.isLoggedIn(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return snapshot.data! ? const MainPage() : const IntroPage();
+          }
+          return const Text('loading...');
+        },
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
