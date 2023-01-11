@@ -28,10 +28,10 @@ Future<void> initDatabase() async {
 }
 
 void initDependencies() {
+  GetIt.I.registerSingleton<SettingsService>(SettingsService());
   GetIt.I.registerSingleton<ChatService>(ChatService());
   GetIt.I.registerSingleton<ContactService>(ContactService());
-  GetIt.I.registerSingleton<MessageService>(MessageService());
-  GetIt.I.registerSingleton<SettingsService>(SettingsService());
+  GetIt.I.registerSingleton<IMessageService>(MessageService());
 }
 
 class MyApp extends StatelessWidget {

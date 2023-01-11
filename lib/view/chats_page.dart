@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:secure_chat/service/chat_service.dart';
 import 'package:secure_chat/view/chat_page.dart';
 
+import '../domain/chat.dart';
+
 class ChatsPage extends StatefulWidget {
   const ChatsPage({super.key});
 
@@ -90,6 +92,6 @@ class _ChatsPageState extends State<ChatsPage> {
   void onChatClicked(Chat chat) {
     // todo fix click area
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ChatPage(chat.name)));
+        .push(MaterialPageRoute(builder: (context) => ChatPage(chat.publicKey)));
   }
 }
