@@ -15,7 +15,10 @@ abstract class IMessageService {
 class MessageServiceMock implements IMessageService {
   @override
   Future<List<Message>> getMessages(String key) async {
-    return [Message('key1','key2', 'hello dart!'), Message('key1', 'key2', 'hello world!')];
+    return [
+      Message('key1', 'key2', 'hello dart!'),
+      Message('key1', 'key2', 'hello world!')
+    ];
   }
 
   @override
@@ -31,23 +34,11 @@ class MessageService implements IMessageService {
   Future<List<Message>> getMessages(String key) async {
     var settings = await _settingsService.getSettings();
 
-    print(key);
-    print(settings!.publicKey);
-
-    try {
-      var url = Uri.http('10.0.2.2:8080', 'messages',
-          {'key1': settings.publicKey, 'key2': key});
-      var response = await http.get(url);
-      
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      
-      var parsedJson = const JsonDecoder().convert(response.body);
-      return parseMessages(parsedJson);
-    } catch (e) {
-      print(e);
-      return [];
-    }
+    var url = Uri.http('10.0.2.2:8080', 'messages',
+        {'key1': settings!.publicKey, 'key2': key});
+    var response = await http.get(url);
+    var parsedJson = const JsonDecoder().convert(response.body);
+    return parseMessages(parsedJson);
   }
 
   List<Message> parseMessages(List<dynamic> rawMessages) {
@@ -72,10 +63,6 @@ class MessageService implements IMessageService {
     var body =
         jsonEncode({'from': settings!.publicKey, 'to': key, 'text': text});
 
-    print(body);
-
-    var response = await http.put(url, headers: headers, body: body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+    await http.put(url, headers: headers, body: body);
   }
 }

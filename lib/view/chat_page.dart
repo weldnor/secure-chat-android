@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secure_chat/domain/message.dart';
@@ -16,12 +18,23 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final IMessageService _messageService = GetIt.I.get<IMessageService>();
-  final TextEditingController _textEditingController = TextEditingController();
+
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    _textEditingController.text = 'Enter message...';
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      print('timer');
+      update();
+    });
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
   }
 
   @override
@@ -71,14 +84,25 @@ class _ChatPageState extends State<ChatPage> {
               children: [
                 Expanded(
                     child: TextField(
-                  controller: _textEditingController,
-                  onSubmitted: (text) {
-                    _messageService.addMessage(widget.publicKey, text);
-                  },
+                  decoration: const InputDecoration(
+                      hintText: 'Write message here',
+                      border: OutlineInputBorder()),
+                  onSubmitted: onSubmitted,
                 ))
               ],
             )
           ],
         )));
+  }
+
+  void onSubmitted(text) async {
+    await _messageService.addMessage(widget.publicKey, text);
+    await update();
+  }
+
+  update() {
+    setState(() {
+      //nothing
+    });
   }
 }
