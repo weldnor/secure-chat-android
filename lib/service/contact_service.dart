@@ -6,18 +6,26 @@ abstract class AbstractContactService {
   Future<List<Contact>> getContacts();
 
   Future<void> addContact(Contact contact);
+
+  Future<bool> contactExistsWithKey(String key);
+
 }
 
 class ContactService implements AbstractContactService {
-  ContactRepository repository = ContactRepository();
+  final ContactRepository _contactRepository = ContactRepository();
 
   @override
   Future<List<Contact>> getContacts() {
-    return repository.getContacts();
+    return _contactRepository.getContacts();
   }
 
   @override
   Future<void> addContact(Contact contact) {
-    return repository.addContact(contact);
+    return _contactRepository.addContact(contact);
+  }
+
+  @override
+  Future<bool> contactExistsWithKey(String key) {
+    return _contactRepository.contactExistsWithKey(key);
   }
 }

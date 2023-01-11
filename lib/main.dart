@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:secure_chat/domain/contact.dart';
+import 'package:secure_chat/domain/message.dart';
 import 'package:secure_chat/service/chat_service.dart';
 import 'package:secure_chat/service/contact_service.dart';
 import 'package:secure_chat/service/message_service.dart';
@@ -25,13 +26,14 @@ Future<void> initDatabase() async {
   await Hive.initFlutter();
   Hive.registerAdapter(SettingsAdapter());
   Hive.registerAdapter(ContactAdapter());
+  Hive.registerAdapter(MessageAdapter());
 }
 
 void initDependencies() {
   GetIt.I.registerSingleton<SettingsService>(SettingsService());
-  GetIt.I.registerSingleton<ChatService>(ChatService());
-  GetIt.I.registerSingleton<ContactService>(ContactService());
   GetIt.I.registerSingleton<IMessageService>(MessageService());
+  GetIt.I.registerSingleton<ContactService>(ContactService());
+  GetIt.I.registerSingleton<IChatService>(ChatService());
 }
 
 class MyApp extends StatelessWidget {

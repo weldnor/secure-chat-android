@@ -8,6 +8,8 @@ abstract class AbstractContactRepository {
   Future<void> addContact(Contact contact);
 
   Future<void> deleteContacts();
+
+  Future<bool> contactExistsWithKey(String key);
 }
 
 class ContactRepository extends AbstractContactRepository {
@@ -27,5 +29,15 @@ class ContactRepository extends AbstractContactRepository {
   Future<void> deleteContacts() async {
     var box = await Hive.openBox<Contact>('contacts');
     await box.clear();
+  }
+
+  @override
+  Future<bool> contactExistsWithKey(String key) async {
+    var contacts = await getContacts();
+
+    for (int i = 0; i < contacts.length; i++) {
+      if (contacts[i].publicKey == key) return true;
+    }
+    return false;
   }
 }

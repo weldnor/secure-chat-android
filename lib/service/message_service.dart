@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:crypton/crypton.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secure_chat/domain/message.dart';
+import 'package:secure_chat/repository/sent_message_repository.dart';
 import 'package:secure_chat/service/settings_service.dart';
 
 import 'package:http/http.dart' as http;
@@ -9,26 +11,16 @@ import 'package:http/http.dart' as http;
 abstract class IMessageService {
   Future<List<Message>> getMessages(String key);
 
+  Future<List<Message>> getSentMessages(String key);
+
   Future<void> addMessage(String key, String text);
-}
 
-class MessageServiceMock implements IMessageService {
-  @override
-  Future<List<Message>> getMessages(String key) async {
-    return [
-      Message('key1', 'key2', 'hello dart!'),
-      Message('key1', 'key2', 'hello world!')
-    ];
-  }
-
-  @override
-  Future<void> addMessage(String key, String text) {
-    throw UnimplementedError();
-  }
+  Future<String> decryptMessage(String text);
 }
 
 class MessageService implements IMessageService {
   final SettingsService _settingsService = GetIt.I.get<SettingsService>();
+  final SentMessageRepository _sentMessageRepository = SentMessageRepository();
 
   @override
   Future<List<Message>> getMessages(String key) async {
@@ -36,33 +28,70 @@ class MessageService implements IMessageService {
 
     var url = Uri.http('10.0.2.2:8080', 'messages',
         {'key1': settings!.publicKey, 'key2': key});
+
     var response = await http.get(url);
-    var parsedJson = const JsonDecoder().convert(response.body);
-    return parseMessages(parsedJson);
-  }
+    var parsedJsonArray = const JsonDecoder().convert(response.body);
 
-  List<Message> parseMessages(List<dynamic> rawMessages) {
-    List<Message> result = [];
+    List<Message> messages = [];
 
-    for (int i = 0; i < rawMessages.length; i++) {
-      String from = rawMessages[i]['from'];
-      String to = rawMessages[i]['to'];
-      String text = rawMessages[i]['text'];
-      result.add(Message(from, to, text));
+    for (int i = 0; i < parsedJsonArray.length; i++) {
+      var parsedJsonObj = parsedJsonArray[i];
+      String from = parsedJsonObj['from'];
+      String to = parsedJsonObj['to'];
+      String text = parsedJsonObj['text'];
+      int timestamp = parsedJsonObj['timestamp'];
+
+      if (from == settings.publicKey) {
+        //skip my messages
+        continue;
+      }
+
+      String decryptedText = await decryptMessage(text);
+      messages.add(Message(from, to, decryptedText, timestamp));
     }
-    return result;
+
+    // merge my messages
+    messages.addAll(await getSentMessages(key));
+
+    messages.sort((a, b) => a.timestamp > b.timestamp ? 1 : -1);
+
+    return messages;
   }
 
   @override
   Future<void> addMessage(String key, String text) async {
     var settings = await _settingsService.getSettings();
+    var timestamp = DateTime.now().millisecondsSinceEpoch;
+
+
+    // add message to local storage
+    _sentMessageRepository.addSentMessage(Message(settings!.publicKey, key, text, timestamp));
+
+
 
     var url = Uri.http('10.0.2.2:8080', 'messages');
 
     var headers = {"Content-Type": "application/json"};
-    var body =
-        jsonEncode({'from': settings!.publicKey, 'to': key, 'text': text});
+
+    var publicKeyObj = RSAPublicKey.fromString(key);
+    var encryptedText = publicKeyObj.encrypt(text);
+
+    var body = jsonEncode(
+        {'from': settings.publicKey, 'to': key, 'text': encryptedText, 'timestamp': timestamp});
 
     await http.put(url, headers: headers, body: body);
+  }
+
+  @override
+  Future<String> decryptMessage(String text) async {
+    var settings = await _settingsService.getSettings();
+
+    var privateKeyObj = RSAPrivateKey.fromString(settings!.privateKey);
+    return privateKeyObj.decrypt(text);
+  }
+
+  @override
+  Future<List<Message>> getSentMessages(String key) {
+    return _sentMessageRepository.getSentMessages(key);
   }
 }
