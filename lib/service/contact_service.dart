@@ -9,6 +9,8 @@ abstract class AbstractContactService {
 
   Future<bool> contactExistsWithKey(String key);
 
+  Future<Contact> getContact(key);
+
 }
 
 class ContactService implements AbstractContactService {
@@ -27,5 +29,10 @@ class ContactService implements AbstractContactService {
   @override
   Future<bool> contactExistsWithKey(String key) {
     return _contactRepository.contactExistsWithKey(key);
+  }
+
+  @override
+  Future<Contact> getContact(key) {
+    return _contactRepository.getContact(key);
   }
 }

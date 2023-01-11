@@ -5,14 +5,14 @@ class Chat {
   String avatarUrl;
   String publicKey;
   String lastMessageText;
-  DateTime lastMessageDate;
+  int lastMessageTimestamp;
   int unread;
 
-
   getLastMessageDateAsString() {
-    return DateFormat.MMMEd().format(lastMessageDate);
+    return DateFormat.MMMEd()
+        .format(DateTime.fromMillisecondsSinceEpoch(lastMessageTimestamp));
   }
 
   Chat(this.name, this.avatarUrl, this.publicKey, this.lastMessageText,
-      this.lastMessageDate, this.unread);
+      this.lastMessageTimestamp, this.unread);
 }

@@ -6,43 +6,17 @@ import 'package:secure_chat/service/contact_service.dart';
 import 'package:secure_chat/service/settings_service.dart';
 
 import '../domain/chat.dart';
+import '../domain/contact.dart';
+import 'message_service.dart';
 
 abstract class IChatService {
   Future<List<Chat>> getChats();
 }
 
-class ChatServiceMock implements IChatService {
-  @override
-  Future<List<Chat>> getChats() async {
-    return [
-      Chat(
-          'Anthony',
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU',
-          'key1',
-          'What do you think?',
-          DateTime.now(),
-          2),
-      Chat(
-          'Anthony',
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU',
-          'key1',
-          'What do you think?',
-          DateTime.now(),
-          2),
-      Chat(
-          'Anthony',
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU',
-          'key1',
-          'What do you think?',
-          DateTime.now(),
-          2)
-    ];
-  }
-}
-
 class ChatService implements IChatService {
   final SettingsService _settingsService = GetIt.I.get<SettingsService>();
   final ContactService _contactService = GetIt.I.get<ContactService>();
+  final IMessageService _messageService = GetIt.I.get<IMessageService>();
 
   @override
   Future<List<Chat>> getChats() async {
@@ -58,17 +32,29 @@ class ChatService implements IChatService {
     for (int i = 0; i < jsonArray.length; i++) {
       var jsonObj = jsonArray[i];
 
-      var key = jsonObj['key'];
-      // var lastMessageText = jsonObj['lastMessageText'];
-      // var lastMessageFrom = jsonObj['lastMessageFrom'];
-      var lastMessageDate = jsonObj['lastMessageDate'];
-      var unread = jsonObj['unread'];
+      String key = jsonObj['key'];
+      String lastMessageText = jsonObj['lastMessageText'];
+      String lastMessageKey = jsonObj['lastMessageKey'];
+      int lastMessageTimestamp = jsonObj['lastMessageTimestamp'];
+      int unread = jsonObj['unread'];
 
       if (!await _contactService.contactExistsWithKey(key)) {
         continue;
       }
 
-      chats.add(Chat('name', 'avatarUrl', key, 'lastMessageText', DateTime.fromMicrosecondsSinceEpoch(lastMessageDate), unread));
+      Contact contact = await _contactService.getContact(key);
+
+      if (lastMessageKey == settings.publicKey) {
+        var lastMessage = (await _messageService.getSentMessages(key)).last;
+
+        chats.add(Chat(settings.name, settings.avatarUrl, key, lastMessage.text,
+            lastMessageTimestamp, unread));
+        continue;
+      }
+      // else
+
+      chats.add(Chat(contact.name, contact.avatarUrl, key, await _messageService.decryptMessage(lastMessageText),
+          lastMessageTimestamp, unread));
     }
     // fixme
     return chats;

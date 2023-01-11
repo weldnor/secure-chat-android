@@ -40,4 +40,13 @@ class ContactRepository extends AbstractContactRepository {
     }
     return false;
   }
+
+  Future<Contact> getContact(key) async{
+    var contacts = await getContacts();
+
+    for (int i = 0; i < contacts.length; i++) {
+      if (contacts[i].publicKey == key) return contacts[i];
+    }
+    throw Error();
+  }
 }
