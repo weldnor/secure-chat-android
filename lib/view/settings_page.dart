@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:secure_chat/view/intro_page.dart';
 import 'package:secure_chat/view/share_key_page.dart';
 
+import '../domain/settings.dart';
 import '../service/settings_service.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -36,55 +37,95 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Column(children: [
-        Row(
-          children: const [
-            Text('Settings'),
-          ],
+        body: SingleChildScrollView(
+      //hack
+      child: SafeArea(
+        child: FutureBuilder<Settings?>(
+          future: _settingsService.getSettings(),
+          builder: (context, snapshot) {
+            var settings = snapshot.data;
+
+            if (snapshot.hasData) {
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: const [
+                        Text('Settings', style: TextStyle(fontSize: 24)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 60),
+                      child: SizedBox(
+                          width: 135,
+                          height: 135,
+                          child: CircleAvatar(
+                            foregroundImage: NetworkImage(settings!.avatarUrl),
+                            backgroundColor: Colors.white,
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 5),
+                              child: TextField(
+                                onChanged: (value) {
+                                  //todo move logic to method
+                                  _name = value;
+                                },
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.grey[300],
+                                  hintStyle: TextStyle(color: Colors.grey[800]),
+                                  hintText: "Bryan",
+                                ),
+                              ),
+                            ),
+                          ),
+                          MaterialButton(
+                            color: Colors.blue[100],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                            onPressed: onSaveNickButtonClicked,
+                            child: const Text('save'),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: ElevatedButton(
+                          onPressed: onShowPublicKeyButtonClicked,
+                          style: ElevatedButton.styleFrom(
+                              shape: const StadiumBorder(),
+                              backgroundColor: Colors.blue[100],
+                              foregroundColor: Colors.grey[800],
+                              minimumSize: const Size.fromHeight(55)),
+                          child: const Text('Show public key'),
+                        )),
+                    Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: ElevatedButton(
+                          onPressed: onDeleteAccountButtonClicked,
+                          style: ElevatedButton.styleFrom(
+                              shape: const StadiumBorder(),
+                              foregroundColor: Colors.grey[800],
+                              backgroundColor: Colors.red[100],
+                              minimumSize: const Size.fromHeight(55)),
+                          child: const Text('Delete account'),
+                        ))
+                  ]);
+            }
+            return Container();
+          },
         ),
-        Row(
-          children: const [
-            Center(
-              child: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoqWIPKg9kRQhn9r3qgpcRSACAXvg-dbTOWQiDN6b5ahLRZ-AU_ioL_uXv5Un0kNGPNhE&usqp=CAU')),
-            )
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(onChanged: (value) {
-                //todo move logic to method
-                _name = value;
-              }),
-            ),
-            Column(
-              children: [
-                MaterialButton(
-                  onPressed: onSaveNickButtonClicked,
-                  child: const Text('save'),
-                )
-              ],
-            )
-          ],
-        ),
-        Row(
-          children: [
-            MaterialButton(
-                onPressed: onShowPublicKeyButtonClicked,
-                child: const Text('Show public key'))
-          ],
-        ),
-        Row(
-          children: [
-            MaterialButton(
-                onPressed: onDeleteAccountButtonClicked,
-                child: const Text('Delete account'))
-          ],
-        )
-      ]),
+      ),
     ));
   }
 
