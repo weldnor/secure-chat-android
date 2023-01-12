@@ -74,7 +74,7 @@ class _ContactsPageState extends State<ContactsPage> {
                         },
                       );
                     }
-                    return const Text('loading...');
+                    return Container();
                   })),
         ]),
       ),

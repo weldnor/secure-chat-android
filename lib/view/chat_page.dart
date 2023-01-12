@@ -76,7 +76,7 @@ class _ChatPageState extends State<ChatPage> {
                       },
                     );
                   }
-                  return const Text('loading...');
+                  return Container();
                 },
               ),
             ),

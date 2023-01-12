@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           if (snapshot.hasData) {
             return snapshot.data! ? const MainPage() : const IntroPage();
           }
-          return const Text('loading...');
+          return Container();
         },
       ),
       debugShowCheckedModeBanner: false,

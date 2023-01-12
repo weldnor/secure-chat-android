@@ -108,7 +108,7 @@ class _ChatsPageState extends State<ChatsPage> {
                   ),
                 );
               }
-              return const Text('loading');
+              return Container();
             })
       ]),
     ));

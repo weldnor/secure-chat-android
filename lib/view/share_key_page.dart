@@ -53,7 +53,7 @@ class _ShareKeyPageState extends State<ShareKeyPage> {
                       ),
                     );
                   }
-                  return const Text('loaded...');
+                  return Container();
                 })));
   }
 }
