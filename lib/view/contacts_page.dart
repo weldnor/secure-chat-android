@@ -85,7 +85,7 @@ class _ContactsPageState extends State<ContactsPage> {
 
   onContactClicked(Contact contact){
     return Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => ChatPage(contact.publicKey),
+      builder: (context) => ChatPage(contact.name, contact.publicKey),
     ));
   }
 

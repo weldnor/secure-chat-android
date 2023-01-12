@@ -117,7 +117,7 @@ class _ChatsPageState extends State<ChatsPage> {
   void onChatClicked(Chat chat) {
     // todo fix click area
     Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => ChatPage(chat.publicKey)));
+        MaterialPageRoute(builder: (context) => ChatPage(chat.name, chat.publicKey)));
   }
 
   update() {

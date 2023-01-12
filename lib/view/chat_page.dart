@@ -7,8 +7,9 @@ import 'package:secure_chat/service/message_service.dart';
 
 class ChatPage extends StatefulWidget {
   final String publicKey;
+  final String name;
 
-  const ChatPage(this.publicKey, {super.key});
+  const ChatPage(this.name, this.publicKey, {super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -18,7 +19,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final IMessageService _messageService = GetIt.I.get<IMessageService>();
-
+  final _textEditingController = TextEditingController();
   late Timer _timer;
 
   @override
@@ -30,17 +31,17 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-
   @override
   void dispose() {
     super.dispose();
     _timer.cancel();
+    _textEditingController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.publicKey)),
+        appBar: AppBar(title: Text(widget.name)),
         body: SafeArea(
             child: Column(
           children: [
@@ -83,11 +84,17 @@ class _ChatPageState extends State<ChatPage> {
             Row(
               children: [
                 Expanded(
-                    child: TextField(
-                  decoration: const InputDecoration(
-                      hintText: 'Write message here',
-                      border: OutlineInputBorder()),
-                  onSubmitted: onSubmitted,
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: _textEditingController,
+                    decoration: const InputDecoration(
+                        hintText: 'Write message here',
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30)))),
+                    onSubmitted: onSubmitted,
+                  ),
                 ))
               ],
             )
@@ -97,6 +104,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void onSubmitted(text) async {
     await _messageService.addMessage(widget.publicKey, text);
+    _textEditingController.text = '';
     await update();
   }
 
