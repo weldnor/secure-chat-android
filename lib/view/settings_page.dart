@@ -4,6 +4,8 @@ import 'package:secure_chat/view/intro_page.dart';
 import 'package:secure_chat/view/share_key_page.dart';
 
 import '../domain/settings.dart';
+import '../service/contact_service.dart';
+import '../service/message_service.dart';
 import '../service/settings_service.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -17,6 +19,8 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final _settingsService = GetIt.I.get<SettingsService>();
+  final _contactService = GetIt.I.get<ContactService>();
+  final _messageService = GetIt.I.get<IMessageService>();
 
   var _name = '';
 
@@ -138,6 +142,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   onDeleteAccountButtonClicked() async {
     await _settingsService.deleteSettings();
+    await _contactService.deleteContacts();
+    await _messageService.deleteSentMessages();
 
     // todo bug? where is context?
     Navigator.of(context).push(MaterialPageRoute(

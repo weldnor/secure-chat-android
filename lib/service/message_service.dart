@@ -16,6 +16,8 @@ abstract class IMessageService {
   Future<void> addMessage(String key, String text);
 
   Future<String> decryptMessage(String text);
+
+  Future<void> deleteSentMessages();
 }
 
 class MessageService implements IMessageService {
@@ -93,5 +95,10 @@ class MessageService implements IMessageService {
   @override
   Future<List<Message>> getSentMessages(String key) {
     return _sentMessageRepository.getSentMessages(key);
+  }
+
+  @override
+  Future<void> deleteSentMessages() {
+    return _sentMessageRepository.deleteSentMessages();
   }
 }

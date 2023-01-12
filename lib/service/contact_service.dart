@@ -11,6 +11,8 @@ abstract class AbstractContactService {
 
   Future<Contact> getContact(key);
 
+  Future<void> deleteContacts();
+
 }
 
 class ContactService implements AbstractContactService {
@@ -34,5 +36,10 @@ class ContactService implements AbstractContactService {
   @override
   Future<Contact> getContact(key) {
     return _contactRepository.getContact(key);
+  }
+
+  @override
+  Future<void> deleteContacts() {
+    return _contactRepository.deleteContacts();
   }
 }

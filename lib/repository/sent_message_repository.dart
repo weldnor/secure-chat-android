@@ -11,4 +11,9 @@ class SentMessageRepository {
     var box = await Hive.openBox<Message>('sent_messages');
     box.add(message);
   }
+
+  Future<void> deleteSentMessages() async {
+    var box = await Hive.openBox<Message>('sent_messages');
+    await box.clear();
+  }
 }
