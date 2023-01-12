@@ -20,36 +20,60 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
             child: Column(children: [
-      Expanded(
-          child: Column(children: [
-        Row(
-          children: const [Text('Choice your nick')],
-        ),
-        SizedBox(
-            child: TextField(
-          onChanged: _onNickChanged,
-          decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
+          Expanded(
+              child: Column(children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 60),
+              child: SizedBox(
+                  width: 135,
+                  height: 135,
+                  child: CircleAvatar(
+                    foregroundImage: NetworkImage(
+                        'https://cdn.icon-icons.com/icons2/2591/PNG/512/hacker_anonymous_icon_154428.png'),
+                    backgroundColor: Colors.white,
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Choice your nick'),
+                      ),
+                    ],
+                  ),
+                  TextField(
+                    onChanged: _onNickChanged,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[300],
+                      hintStyle: TextStyle(color: Colors.grey[800]),
+                      hintText: "Bryan",
+                    ),
+                  )
+                ],
               ),
-              filled: true,
-              hintStyle: TextStyle(color: Colors.grey[800]),
-              hintText: "Type in your text",
-              fillColor: Colors.white70),
-        )),
-      ])),
-      Padding(
-          padding: const EdgeInsets.all(15),
-          child: ElevatedButton(
-              onPressed: () =>
-                  _validate() ? onRegisterButtonClicked(context) : null,
-              style: ElevatedButton.styleFrom(
-                  shape: const StadiumBorder(),
-                  minimumSize: const Size.fromHeight(55)),
-              child: const Text('Next')))
-    ])));
+            ),
+          ])),
+          Padding(
+              padding: const EdgeInsets.all(15),
+              child: ElevatedButton(
+                  onPressed: () =>
+                      _validate() ? onRegisterButtonClicked(context) : null,
+                  style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                      minimumSize: const Size.fromHeight(55)),
+                  child: const Text('Next')))
+        ])));
   }
 
   _onNickChanged(text) {

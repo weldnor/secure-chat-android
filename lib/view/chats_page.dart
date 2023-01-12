@@ -81,20 +81,23 @@ class _ChatsPageState extends State<ChatsPage> {
                                     Text(chats[index]
                                         .getLastMessageDateAsString()),
                                   ]),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: Container(
-                                      width: 20,
-                                      height: 20,
-                                      decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)),
-                                          color: Colors.blue),
-                                      child: Center(
-                                          child: Text(
-                                        chats[index].unread.toString(),
-                                        style: const TextStyle(fontSize: 10),
-                                      )),
+                                  Visibility(
+                                    visible: chats[index].unread > 0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Container(
+                                        width: 20,
+                                        height: 20,
+                                        decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30)),
+                                            color: Colors.blue),
+                                        child: Center(
+                                            child: Text(
+                                          chats[index].unread.toString(),
+                                          style: const TextStyle(fontSize: 10),
+                                        )),
+                                      ),
                                     ),
                                   ),
                                 ])
